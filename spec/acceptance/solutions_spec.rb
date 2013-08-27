@@ -220,4 +220,14 @@ describe "Solutions" do
       "old-bottom" => "2.0.0"
     })
   end
+
+  it "fails with a self dependency" do
+    graph = Solve::Graph.new
+
+    graph.artifacts("bottom", "1.0.0")
+    graph.artifacts("middle", "1.0.0").depends("top", "= 1.0.0").depends("middle")
+
+    demands = [["bottom", "1.0.0"],["middle", "1.0.0"]]
+    result = sanitize_result Solve.it!(graph, demands)
+  end
 end
