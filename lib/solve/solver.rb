@@ -293,6 +293,7 @@ module Solve
 
       def add_dependencies(dependencies, source)
         dependencies.each do |dependency|
+          next if (source.respond_to?(:name) && dependency.name == source.name)
           trace("Adding constraint #{dependency.name} #{dependency.constraint} from #{source}")
           variable_table.add(dependency.name, source)
           constraint_table.add(dependency, source)
