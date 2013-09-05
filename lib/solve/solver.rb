@@ -157,7 +157,10 @@ module Solve
                       # Ignoring the valid dependencies because for now we want to focus on the ones which are broken for sure
                       unless can_add_new_constraint?(dependency)
                         # Aggregating the known constraints on that broken dependency
+                        existing_constraints = (solution.has_key?(dependency.name) && solution[dependency.name][:constraints]) || nil
+
                         constraints = (
+                          (existing_constraints || []) +
                           possible_artifact.dependencies.select { |d| d.name == dependency.name }.collect { |d| d.constraint.to_s} +
                           constraint_table.constraints_on_artifact(dependency.name).collect {|c| c.to_s}
                         ).to_set.to_a
